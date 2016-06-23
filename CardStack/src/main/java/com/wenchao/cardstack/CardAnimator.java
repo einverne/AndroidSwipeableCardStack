@@ -242,7 +242,7 @@ public class CardAnimator {
     }
 
     /**
-     * 拖拽
+     * 拖拽, 设置动画
      * @param e1 MotionEvent
      * @param e2 MotionEvent
      * @param distanceX distance of x axis
@@ -272,9 +272,13 @@ public class CardAnimator {
         //animate secondary views.
         for (View v : mCardCollection) {
             int index = mCardCollection.indexOf(v);
-            if (v != getTopView() && index != 0) {
+            if (index == mCardCollection.size() - 2) {      // 移动放大第二层
                 LayoutParams l = scaleFrom(v, mLayoutsMap.get(v), (int) (Math.abs(x_diff) * 0.05));
                 moveFrom(v, l, 0, (int) (Math.abs(x_diff) * 0.1));
+            }
+            if (index == mCardCollection.size() - 3) {      // 移动放大第三层
+                LayoutParams l = scaleFrom(v, mLayoutsMap.get(v), (int) (Math.abs(x_diff) * 0.02));
+                moveFrom(v, l, 0, (int) (Math.abs(x_diff) * 0.05));
             }
         }
     }
