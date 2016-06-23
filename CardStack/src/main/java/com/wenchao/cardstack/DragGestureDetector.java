@@ -15,6 +15,7 @@ public class DragGestureDetector {
     private DragListener mListener;
     private boolean mStarted = false;
     private MotionEvent mOriginalEvent;
+    private Context context;
     public interface DragListener {
         boolean onDragStart(MotionEvent e1, MotionEvent e2, float distanceX,
                                 float distanceY);
@@ -26,6 +27,7 @@ public class DragGestureDetector {
     }
 
     public DragGestureDetector(Context context, DragListener myDragListener){
+        this.context = context;
         mGestureDetector = new GestureDetectorCompat(context,new MyGestureListener());
         mListener = myDragListener;
     }

@@ -25,7 +25,7 @@ public class DefaultStackEventListener implements CardStack.CardEventListener {
     }
 
     @Override
-    public void discarded(int mIndex,int direction) {
+    public void discarded(int mIndex, int direction) {
 
     }
 
