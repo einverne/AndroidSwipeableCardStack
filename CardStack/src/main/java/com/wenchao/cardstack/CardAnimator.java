@@ -178,11 +178,11 @@ public class CardAnimator {
                     topView.setRotation((Float) animation.getAnimatedValue());
                 }
             });
-            rotateAnim.setDuration(400);
+            rotateAnim.setDuration(250);
             animatorCollection.add(rotateAnim);
         }
 
-        discardAnim.setDuration(400);
+        discardAnim.setDuration(250);
         animatorCollection.add(discardAnim);
 
         for (int i = 0; i < mCardCollection.size(); i++) {
@@ -220,9 +220,9 @@ public class CardAnimator {
             }
 
         });
-
         as.playTogether(animatorCollection);
         as.start();
+        mRotation = 0f;
     }
 
     /**
