@@ -251,23 +251,7 @@ public class CardStack extends RelativeLayout {
                 boolean discard = mEventListener.swipeEnd(direction, distance);
                 if (discard) {
                     if (canSwipe) {
-                        mCardAnimator.discard(direction, new AnimatorListenerAdapter() {
-
-                            @Override
-                            public void onAnimationEnd(Animator arg0) {
-                                mCardAnimator.initLayout();
-                                mIndex++;
-                                mEventListener.discarded(mIndex, direction);
-
-                                //mIndex = mIndex%mAdapter.getCount();
-                                loadLast();
-
-                                viewCollection.get(0).setOnTouchListener(null);
-                                viewCollection.get(viewCollection.size() - 1)
-                                        .setOnTouchListener(mOnTouchListener);
-                            }
-
-                        });
+                        discardTop(direction);
                     }
                 } else {
                     if (canSwipe) {
