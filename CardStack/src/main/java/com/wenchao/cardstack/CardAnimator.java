@@ -28,7 +28,7 @@ public class CardAnimator {
     private static final int REMOTE_DISTANCE = 1000;
     private int mBackgroundColor;
     public ArrayList<View> mCardCollection;     // all card views
-    private float mRotation;
+    private float mRotation = 0f;
     private HashMap<View, RelativeLayout.LayoutParams> mLayoutsMap;         // view and LayoutParams
     private RelativeLayout.LayoutParams[] mRemoteLayouts = new RelativeLayout.LayoutParams[4];
     private RelativeLayout.LayoutParams baseLayout;
@@ -143,10 +143,15 @@ public class CardAnimator {
 
     }
 
+    /**
+     * discard animation
+     *
+     * @param direction SwipeDirection
+     * @param al        AnimatorListener
+     */
     public void discard(CardUtils.SwipeDirection direction, final AnimatorListener al) {
-        AnimatorSet as = new AnimatorSet();
-        ArrayList<Animator> aCollection = new ArrayList<Animator>();
-
+        AnimatorSet as = new AnimatorSet();             // play a set of animator
+        ArrayList<Animator> animatorCollection = new ArrayList<Animator>();
 
         final View topView = getTopView();
         RelativeLayout.LayoutParams topParams = (RelativeLayout.LayoutParams) topView.getLayoutParams();
@@ -160,8 +165,25 @@ public class CardAnimator {
             }
         });
 
-        discardAnim.setDuration(250);
-        aCollection.add(discardAnim);
+        if (mRotation == 0f) {
+            if (direction == CardUtils.SwipeDirection.DIRECTION_BOTTOM_LEFT || direction == CardUtils.SwipeDirection.DIRECTION_TOP_LEFT) {
+                mRotation = -40f;
+            } else {
+                mRotation = 40f;
+            }
+            ValueAnimator rotateAnim = ValueAnimator.ofFloat(mRotation);
+            rotateAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    topView.setRotation((Float) animation.getAnimatedValue());
+                }
+            });
+            rotateAnim.setDuration(400);
+            animatorCollection.add(rotateAnim);
+        }
+
+        discardAnim.setDuration(400);
+        animatorCollection.add(discardAnim);
 
         for (int i = 0; i < mCardCollection.size(); i++) {
             final View v = mCardCollection.get(i);
@@ -178,12 +200,10 @@ public class CardAnimator {
                     v.setLayoutParams((LayoutParams) value.getAnimatedValue());
                 }
             });
-            aCollection.add(layoutAnim);
+            animatorCollection.add(layoutAnim);
         }
 
         as.addListener(new AnimatorListenerAdapter() {
-
-
             @Override
             public void onAnimationEnd(Animator animation) {
                 reorder();
@@ -201,15 +221,12 @@ public class CardAnimator {
 
         });
 
-
-        as.playTogether(aCollection);
+        as.playTogether(animatorCollection);
         as.start();
-
-
     }
 
     /**
-     * reverse card
+     * reverse card, when small drag
      *
      * @param e1 MotionEvent
      * @param e2 MotionEvent
@@ -221,7 +238,7 @@ public class CardAnimator {
         rotationAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator v) {
-                topView.setRotation(((Float) (v.getAnimatedValue())).floatValue());
+                topView.setRotation((Float) (v.getAnimatedValue()));
             }
         });
 
