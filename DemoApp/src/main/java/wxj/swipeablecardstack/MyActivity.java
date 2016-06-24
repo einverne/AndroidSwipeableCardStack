@@ -50,27 +50,27 @@ public class MyActivity extends Activity implements View.OnClickListener{
 
         mCardStack.setListener(new CardStack.CardEventListener() {
             @Override
-            public boolean swipeEnd(int section, float distance) {
+            public boolean swipeEnd(CardUtils.SwipeDirection section, float distance) {
                 Log.d(TAG, "swipeEnd");
 
                 return (distance>300)? true : false;
             }
 
             @Override
-            public boolean swipeStart(int section, float distance) {
+            public boolean swipeStart(CardUtils.SwipeDirection section, float distance) {
                 Log.d(TAG, "swipeStart");
                 return true;
             }
 
             @Override
-            public boolean swipeContinue(int section, float distanceX, float distanceY) {
+            public boolean swipeContinue(CardUtils.SwipeDirection section, float distanceX, float distanceY) {
                 Log.d(TAG, "swipeContinue");
 
                 return true;
             }
 
             @Override
-            public void discarded(int mIndex, int direction) {
+            public void discarded(int mIndex, CardUtils.SwipeDirection direction) {
                 Log.d(TAG, "discarded " + mIndex + " direction " + direction);
 
             }
@@ -107,11 +107,11 @@ public class MyActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_dislike:
-                mCardStack.discardTop(CardUtils.DIRECTION_BOTTOM_LEFT);
+                mCardStack.discardTop(CardUtils.SwipeDirection.DIRECTION_BOTTOM_LEFT);
 
                 break;
             case R.id.btn_like:
-                mCardStack.discardTop(CardUtils.DIRECTION_BOTTOM_RIGHT);
+                mCardStack.discardTop(CardUtils.SwipeDirection.DIRECTION_BOTTOM_RIGHT);
 
                 break;
         }

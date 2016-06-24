@@ -6,6 +6,17 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class CardUtils {
+
+    public enum SwipeDirection {
+        DIRECTION_TOP_LEFT(0), DIRECTION_TOP_RIGHT(1), DIRECTION_BOTTOM_LEFT(2), DIRECTION_BOTTOM_RIGHT(3);
+
+        private final int value;
+
+        private SwipeDirection(int value) {
+            this.value = value;
+        }
+    }
+
     public final static int DIRECTION_TOP_LEFT = 0;
     public final static int DIRECTION_TOP_RIGHT = 1;
     public final static int DIRECTION_BOTTOM_LEFT = 2;
@@ -112,18 +123,18 @@ public class CardUtils {
         return (float) Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
-    public static int direction(float x1, float y1, float x2, float y2) {
+    public static SwipeDirection direction(float x1, float y1, float x2, float y2) {
         if (x2 > x1) {//RIGHT
             if (y2 > y1) {//BOTTOM
-                return DIRECTION_BOTTOM_RIGHT;
+                return SwipeDirection.DIRECTION_BOTTOM_RIGHT;
             } else {//TOP
-                return DIRECTION_TOP_RIGHT;
+                return SwipeDirection.DIRECTION_TOP_RIGHT;
             }
         } else {//LEFT
             if (y2 > y1) {//BOTTOM
-                return DIRECTION_BOTTOM_LEFT;
+                return SwipeDirection.DIRECTION_BOTTOM_LEFT;
             } else {//TOP
-                return DIRECTION_TOP_LEFT;
+                return SwipeDirection.DIRECTION_TOP_LEFT;
             }
         }
     }

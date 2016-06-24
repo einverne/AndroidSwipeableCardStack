@@ -9,23 +9,23 @@ public class DefaultStackEventListener implements CardStack.CardEventListener {
     }
 
     @Override
-    public boolean swipeEnd(int section, float distance) {
+    public boolean swipeEnd(CardUtils.SwipeDirection section, float distance) {
         return distance > mThreshold;
     }
 
     @Override
-    public boolean swipeStart(int section, float distance) {
+    public boolean swipeStart(CardUtils.SwipeDirection section, float distance) {
 
         return false;
     }
 
     @Override
-    public boolean swipeContinue(int section, float distanceX, float distanceY) {
+    public boolean swipeContinue(CardUtils.SwipeDirection section, float distanceX, float distanceY) {
         return false;
     }
 
     @Override
-    public void discarded(int mIndex, int direction) {
+    public void discarded(int mIndex, CardUtils.SwipeDirection direction) {
 
     }
 

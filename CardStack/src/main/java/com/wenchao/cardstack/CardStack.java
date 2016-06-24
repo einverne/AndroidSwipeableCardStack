@@ -49,7 +49,7 @@ public class CardStack extends RelativeLayout {
          * @param distance distance of finger swipe in dp
          * @return true, dismiss animation triggered; false, move back to stack
          */
-        boolean swipeEnd(int section, float distance);
+        boolean swipeEnd(CardUtils.SwipeDirection section, float distance);
 
         /**
          * swipe start callback
@@ -58,7 +58,7 @@ public class CardStack extends RelativeLayout {
          * @param distance distance
          * @return true; false
          */
-        boolean swipeStart(int section, float distance);
+        boolean swipeStart(CardUtils.SwipeDirection section, float distance);
 
         /**
          * swipe continue callback
@@ -68,7 +68,7 @@ public class CardStack extends RelativeLayout {
          * @param distanceY distance of y axis
          * @return true ; false
          */
-        boolean swipeContinue(int section, float distanceX, float distanceY);
+        boolean swipeContinue(CardUtils.SwipeDirection section, float distanceX, float distanceY);
 
         /**
          * this callback invoked when dismiss animation is finished.
@@ -76,7 +76,7 @@ public class CardStack extends RelativeLayout {
          * @param mIndex
          * @param direction the direction of a card when dismiss
          */
-        void discarded(int mIndex, int direction);
+        void discarded(int mIndex, CardUtils.SwipeDirection direction);
 
         /**
          * click on top Card callback
@@ -87,9 +87,9 @@ public class CardStack extends RelativeLayout {
     /**
      * move top card, only discard callback will be called
      *
-     * @param direction CardUtils.DIRECTION_BOTTOM_LEFT
+     * @param direction SwipeDirection
      */
-    public void discardTop(final int direction) {
+    public void discardTop(final CardUtils.SwipeDirection direction) {
         mCardAnimator.discard(direction, new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator arg0) {
@@ -212,7 +212,7 @@ public class CardStack extends RelativeLayout {
                 float y1 = e1.getRawY();
                 float x2 = e2.getRawX();
                 float y2 = e2.getRawY();
-                final int direction = CardUtils.direction(x1, y1, x2, y2);
+                final CardUtils.SwipeDirection direction = CardUtils.direction(x1, y1, x2, y2);
                 float distance = CardUtils.distance(x1, y1, x2, y2);
 
                 if (canSwipe) {
@@ -230,7 +230,7 @@ public class CardStack extends RelativeLayout {
                 float x2 = e2.getRawX();
                 float y2 = e2.getRawY();
                 //float distance = CardUtils.distance(x1,y1,x2,y2);
-                final int direction = CardUtils.direction(x1, y1, x2, y2);
+                final CardUtils.SwipeDirection direction = CardUtils.direction(x1, y1, x2, y2);
                 if (canSwipe) {
                     mCardAnimator.drag(e1, e2, distanceX, distanceY);
                 }
@@ -246,7 +246,7 @@ public class CardStack extends RelativeLayout {
                 float x2 = e2.getRawX();
                 float y2 = e2.getRawY();
                 float distance = CardUtils.distance(x1, y1, x2, y2);
-                final int direction = CardUtils.direction(x1, y1, x2, y2);
+                final CardUtils.SwipeDirection direction = CardUtils.direction(x1, y1, x2, y2);
 
                 boolean discard = mEventListener.swipeEnd(direction, distance);
                 if (discard) {

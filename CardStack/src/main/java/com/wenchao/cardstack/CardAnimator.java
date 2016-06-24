@@ -106,6 +106,7 @@ public class CardAnimator {
 
     /**
      * 获取 Top Card View
+     *
      * @return top card view
      */
     private View getTopView() {
@@ -142,7 +143,7 @@ public class CardAnimator {
 
     }
 
-    public void discard(int direction, final AnimatorListener al) {
+    public void discard(CardUtils.SwipeDirection direction, final AnimatorListener al) {
         AnimatorSet as = new AnimatorSet();
         ArrayList<Animator> aCollection = new ArrayList<Animator>();
 
@@ -150,7 +151,7 @@ public class CardAnimator {
         final View topView = getTopView();
         RelativeLayout.LayoutParams topParams = (RelativeLayout.LayoutParams) topView.getLayoutParams();
         RelativeLayout.LayoutParams layout = cloneParams(topParams);
-        ValueAnimator discardAnim = ValueAnimator.ofObject(new RelativeLayoutParamsEvaluator(), layout, mRemoteLayouts[direction]);
+        ValueAnimator discardAnim = ValueAnimator.ofObject(new RelativeLayoutParamsEvaluator(), layout, mRemoteLayouts[direction.ordinal()]);
 
         discardAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -209,6 +210,7 @@ public class CardAnimator {
 
     /**
      * reverse card
+     *
      * @param e1 MotionEvent
      * @param e2 MotionEvent
      */
@@ -243,8 +245,9 @@ public class CardAnimator {
 
     /**
      * 拖拽, 设置动画
-     * @param e1 MotionEvent
-     * @param e2 MotionEvent
+     *
+     * @param e1        MotionEvent
+     * @param e2        MotionEvent
      * @param distanceX distance of x axis
      * @param distanceY distance of y axis
      */
