@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class CardStack extends RelativeLayout {
 
     private CardEventListener mEventListener = new DefaultStackEventListener(300);
     private int mContentResource = 0;               // Card res
+
+    private ImageView ivLike;
+    private ImageView ivNope;
 
     public interface CardEventListener {
         //section
@@ -90,6 +95,14 @@ public class CardStack extends RelativeLayout {
      * @param direction SwipeDirection
      */
     public void discardTop(final CardUtils.SwipeDirection direction) {
+        if (direction == CardUtils.SwipeDirection.DIRECTION_BOTTOM_RIGHT ||
+                direction == CardUtils.SwipeDirection.DIRECTION_TOP_RIGHT) {
+            ivLike.setVisibility(VISIBLE);
+            ivLike.setAlpha(1f);
+        } else {
+            ivNope.setVisibility(VISIBLE);
+            ivNope.setAlpha(1f);
+        }
         mCardAnimator.discard(direction, new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator arg0) {
@@ -130,7 +143,7 @@ public class CardStack extends RelativeLayout {
     }
 
     /**
-     * add view to viewCollection
+     * add view to viewCollection, viewCollection will be used to hold child CardView
      */
     private void addContainerViews() {
         FrameLayout v = new FrameLayout(getContext());
@@ -219,6 +232,14 @@ public class CardStack extends RelativeLayout {
                     mCardAnimator.drag(e1, e2, distanceX, distanceY);
                 }
                 mEventListener.swipeStart(direction, distance);
+
+                // add imageview
+                setUpLikeOrNope();
+                ivLike.setVisibility(VISIBLE);
+                ivLike.setAlpha(0f);
+                ivNope.setVisibility(VISIBLE);
+                ivNope.setAlpha(0f);
+
                 return true;
             }
 
@@ -235,6 +256,15 @@ public class CardStack extends RelativeLayout {
                     mCardAnimator.drag(e1, e2, distanceX, distanceY);
                 }
                 mEventListener.swipeContinue(direction, Math.abs(x2 - x1), Math.abs(y2 - y1));
+
+                float alpha = Math.abs(x1 - x2) / 300;
+                // set opacity of imageview
+                if (direction == CardUtils.SwipeDirection.DIRECTION_BOTTOM_RIGHT ||
+                        direction == CardUtils.SwipeDirection.DIRECTION_TOP_RIGHT) {
+                    ivLike.setAlpha(alpha);
+                } else {
+                    ivNope.setAlpha(alpha);
+                }
                 return true;
             }
 
@@ -249,13 +279,21 @@ public class CardStack extends RelativeLayout {
                 final CardUtils.SwipeDirection direction = CardUtils.direction(x1, y1, x2, y2);
 
                 boolean discard = mEventListener.swipeEnd(direction, distance);
-                if (discard) {
-                    if (canSwipe) {
+                if (canSwipe) {
+                    if (discard) {
                         discardTop(direction);
-                    }
-                } else {
-                    if (canSwipe) {
+
+                        // set imageview
+                        if (direction == CardUtils.SwipeDirection.DIRECTION_TOP_RIGHT ||
+                                direction == CardUtils.SwipeDirection.DIRECTION_BOTTOM_RIGHT) {
+                            ivLike.setAlpha(1f);
+                        }
+                    } else {
                         mCardAnimator.reverse(e1, e2);
+
+                        // set imageview gone
+                        ivLike.setVisibility(GONE);
+                        ivNope.setVisibility(GONE);
                     }
                 }
                 return true;
@@ -307,7 +345,7 @@ public class CardStack extends RelativeLayout {
     }
 
     private void loadData() {
-        for (int i = mNumVisible - 1; i >= 0; i--) {
+        for (int i = mNumVisible - 1; i >= 0; i--) {            // loop visible time
             ViewGroup parent = (ViewGroup) viewCollection.get(i);
             int index = (mIndex + mNumVisible - 1) - i;
             if (index > mAdapter.getCount() - 1) {
@@ -318,12 +356,13 @@ public class CardStack extends RelativeLayout {
                 parent.setVisibility(View.VISIBLE);
             }
         }
+        setUpLikeOrNope();
     }
 
     /**
-     * 加载传入 CardView
+     * 加载传入 Get child CardView
      *
-     * @return View
+     * @return child CardView
      */
     private View getContentView() {
         View contentView = null;
@@ -347,6 +386,19 @@ public class CardStack extends RelativeLayout {
         View child = mAdapter.getView(lastIndex, getContentView(), parent);
         parent.removeAllViews();
         parent.addView(child);
+
+        setUpLikeOrNope();
+    }
+
+    private void setUpLikeOrNope() {
+        ViewGroup viewGroup = getTopView();
+        ViewGroup cView = (ViewGroup) viewGroup.getChildAt(0);
+        ivLike = (ImageView) cView.findViewById(R.id.iv_like);
+        ivNope = (ImageView) cView.findViewById(R.id.iv_nope);
+
+    }
+    private ViewGroup getTopView() {
+        return (ViewGroup) viewCollection.get(viewCollection.size() - 1);
     }
 
     public int getStackSize() {

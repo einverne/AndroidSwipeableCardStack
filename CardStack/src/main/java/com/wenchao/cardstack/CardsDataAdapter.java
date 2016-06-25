@@ -1,4 +1,4 @@
-package wxj.swipeablecardstack;
+package com.wenchao.cardstack;
 
 import android.content.Context;
 
