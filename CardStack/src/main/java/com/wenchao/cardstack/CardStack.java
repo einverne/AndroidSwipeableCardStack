@@ -26,9 +26,6 @@ public class CardStack extends RelativeLayout {
     private ArrayAdapter<?> mAdapter;
     private OnTouchListener mOnTouchListener;
     private CardAnimator mCardAnimator;
-    //private Queue<View> mIdleStack = new Queue<View>;
-
-
 
     private CardEventListener mEventListener = new DefaultStackEventListener(300);
     private int mContentResource = 0;
@@ -54,13 +51,11 @@ public class CardStack extends RelativeLayout {
             public void onAnimationEnd(Animator arg0) {
                 mCardAnimator.initLayout();
                 mIndex++;
-                mEventListener.discarded(mIndex, direction);
-
-                //mIndex = mIndex%mAdapter.getCount();
                 loadLast();
 
                 viewCollection.get(0).setOnTouchListener(null);
                 viewCollection.get(viewCollection.size() - 1).setOnTouchListener(mOnTouchListener);
+                mEventListener.discarded(mIndex - 1, direction);
             }
         });
     }
@@ -80,7 +75,6 @@ public class CardStack extends RelativeLayout {
             array.recycle();
         }
 
-        //String sMyValue = attrs.getAttributeValue( "http://schemas.android.com/apk/res/android", "padding" );
         //get attrs assign minVisiableNum
         for(int i = 0; i<mNumVisible; i++){
             addContainerViews();
@@ -143,6 +137,13 @@ public class CardStack extends RelativeLayout {
                 if (canSwipe) {
                     mCardAnimator.drag(e1, e2, distanceX, distanceY);
                 }
+                float x1 = e1.getRawX();
+                float y1 = e1.getRawY();
+                float x2 = e2.getRawX();
+                float y2 = e2.getRawY();
+                final int direction = CardUtils.direction(x1, y1, x2, y2);
+                float distance = CardUtils.distance(x1, y1, x2, y2);
+                mEventListener.swipeStart(direction, distance);
                 return true;
             }
 
@@ -153,12 +154,11 @@ public class CardStack extends RelativeLayout {
                 float y1 = e1.getRawY();
                 float x2 = e2.getRawX();
                 float y2 = e2.getRawY();
-                //float distance = CardUtils.distance(x1,y1,x2,y2);
                 final int direction = CardUtils.direction(x1,y1,x2,y2);
                 if (canSwipe) {
                     mCardAnimator.drag(e1, e2, distanceX, distanceY);
                 }
-                mEventListener.swipeContinue(direction, Math.abs(x2-x1),Math.abs(y2-y1));
+                mEventListener.swipeContinue(direction, Math.abs(x2-x1), Math.abs(y2-y1));
                 return true;
             }
 
@@ -249,6 +249,10 @@ public class CardStack extends RelativeLayout {
         return mAdapter;
     }
 
+    public View getTopView() {
+        return ((ViewGroup) viewCollection.get(viewCollection.size() - 1)).getChildAt(0);
+    }
+
     private void loadData(){
         for(int i=mNumVisible-1 ; i>=0 ; i--) {
             ViewGroup parent = (ViewGroup) viewCollection.get(i);
@@ -282,7 +286,7 @@ public class CardStack extends RelativeLayout {
             return;
         }
 
-        View child = mAdapter.getView( lastIndex, getContentView(), parent);
+        View child = mAdapter.getView(lastIndex, getContentView(), parent);
         parent.removeAllViews();
         parent.addView(child);
     }
