@@ -13,10 +13,10 @@
         android:layout_alignParentTop="true"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingBottom="200dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
 
     </com.wenchao.cardstack.CardStack>
 
