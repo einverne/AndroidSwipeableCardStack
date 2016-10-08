@@ -249,7 +249,7 @@ public class CardAnimator{
             int index  = mCardCollection.indexOf(v);
             if(v!=getTopView() && index != 0){
                 LayoutParams l = scaleFrom(v, mLayoutsMap.get(v), (int) (Math.abs(x_diff) * 0.05));
-                moveFrom(v, l, 0, (int) (Math.abs(x_diff) * 0.1));
+                moveFrom(v, l, 0, (int) (Math.abs(x_diff) * index * 0.1));
             }
         }
     }
