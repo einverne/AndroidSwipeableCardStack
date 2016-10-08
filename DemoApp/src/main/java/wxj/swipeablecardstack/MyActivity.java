@@ -24,11 +24,9 @@ public class MyActivity extends Activity {
 //        mCardStack.setStackMargin(20);
 
         mCardAdapter = new CardsDataAdapter(getApplicationContext());
-        mCardAdapter.add("test1");
-        mCardAdapter.add("test2");
-        mCardAdapter.add("test3");
-        mCardAdapter.add("test4");
-        mCardAdapter.add("test5");
+        for (int i = 1; i < 10; i++) {
+            mCardAdapter.add("test" + i);
+        }
 
         mCardStack.setAdapter(mCardAdapter);
 
