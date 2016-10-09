@@ -7,5 +7,6 @@
     <string name="reset">Reset</string>
     <string name="toggle_swipe">toggle swipe</string>
     <string name="visible_size">visible size</string>
+    <string name="discard_top">discard top</string>
 
 </resources>

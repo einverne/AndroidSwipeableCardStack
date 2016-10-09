@@ -4,6 +4,12 @@
     tools:context=".MyActivity">
 
     <item
+        android:id="@+id/action_discard_top"
+        android:orderInCategory="100"
+        android:title="@string/discard_top"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_toggle_swipe"
         android:orderInCategory="100"
         android:title="@string/toggle_swipe"

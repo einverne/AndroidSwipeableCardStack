@@ -50,6 +50,9 @@ public class MyActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_discard_top:
+                mCardStack.discardTop(1);
+                break;
             case R.id.action_toggle_swipe:
                 mCardStack.setCanSwipe(!mCardStack.getCanSwipe());
                 break;
