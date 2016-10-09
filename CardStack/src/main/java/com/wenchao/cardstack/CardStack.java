@@ -103,6 +103,10 @@ public class CardStack extends RelativeLayout {
         mContentResource = res;
     }
 
+    public boolean getCanSwipe() {
+        return this.canSwipe;
+    }
+
     public void setCanSwipe(boolean can) {
         this.canSwipe = can;
     }

@@ -4,5 +4,8 @@
     <string name="app_name">SwipeableCardStack</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="reset">Reset</string>
+    <string name="toggle_swipe">toggle swipe</string>
+    <string name="visible_size">visible size</string>
 
 </resources>

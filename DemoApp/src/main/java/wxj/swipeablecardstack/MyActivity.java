@@ -49,8 +49,18 @@ public class MyActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_toggle_swipe:
+                mCardStack.setCanSwipe(!mCardStack.getCanSwipe());
+                break;
+            case R.id.action_reset:
+                mCardStack.reset(true);
+                break;
+            case R.id.action_visible_size:
+                mCardStack.setVisibleCardNum(5);
+                break;
+            case R.id.action_settings:
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
